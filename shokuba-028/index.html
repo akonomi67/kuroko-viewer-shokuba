@@ -1,0 +1,133 @@
+<title>昇進を打診された部下が返事の前に確かめる5つ</title>
+<style>
+:root{--bg:#f6f4f1;--panel:#fffefc;--ink:#1c1a19;--dim:#6e6862;--line:#e2ded7;--accent:#b8422f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17161a;--panel:#201e23;--ink:#ece8e4;--dim:#9b948d;--line:#33303a;--accent:#e0705a}}
+:root[data-theme="dark"]{--bg:#17161a;--panel:#201e23;--ink:#ece8e4;--dim:#9b948d;--line:#33303a;--accent:#e0705a}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);margin:0;-webkit-text-size-adjust:100%;
+  font:16px/1.7 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI",sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+h1{font-size:17px;margin:4px 0 14px;font-weight:600;letter-spacing:.02em}
+.meta{color:var(--dim);font-size:13px;font-weight:400;margin-left:8px}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:12px;position:relative;
+  min-height:40vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:46px 20px 26px;box-shadow:0 2px 14px rgba(0,0,0,.10)}
+#now{margin:0;text-align:center;white-space:pre-wrap;word-break:break-word;font-weight:700;
+  font-size:clamp(23px,5.4vw,42px);line-height:1.5;letter-spacing:.01em}
+#nextline{margin:16px 0 0;text-align:center;white-space:pre-wrap;word-break:break-word;
+  color:var(--dim);font-size:clamp(13px,2.8vw,17px);line-height:1.6}
+.badge{position:absolute;left:12px;top:12px;background:rgba(127,127,127,.16);color:var(--dim);
+  font-size:12px;padding:3px 9px;border-radius:20px;line-height:1.6;letter-spacing:.04em}
+.bar{display:flex;align-items:center;gap:10px;margin:12px 0 6px;flex-wrap:wrap}
+button{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;
+  padding:9px 14px;font-size:15px;cursor:pointer;font-family:inherit}
+button:active{transform:translateY(1px)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.play{background:var(--accent);color:#fff;border-color:transparent;min-width:80px;font-weight:600}
+.time{font-variant-numeric:tabular-nums;color:var(--dim);font-size:13px;margin-left:auto}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.marks{position:relative;height:7px;margin:2px 0 14px}
+.marks i{position:absolute;top:0;width:1px;height:7px;background:var(--line)}
+.tabs{display:flex;gap:6px;margin:18px 0 10px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;
+  color:var(--ink);padding:7px 12px;font-weight:600}
+.list{max-height:46vh;overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel);
+  -webkit-overflow-scrolling:touch}
+.row{display:flex;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.row:last-child{border-bottom:0}
+.row:hover{background:rgba(127,127,127,.07)}
+.row.on{background:rgba(184,66,47,.12)}
+.row b{color:var(--dim);font-variant-numeric:tabular-nums;font-weight:500;font-size:13px;
+  min-width:48px;flex:none;padding-top:2px}
+.row span{white-space:pre-wrap;flex:1;font-size:16px;line-height:1.65}
+.tip{color:var(--dim);font-size:12.5px;margin:10px 2px 0}
+@media(max-width:620px){.wrap{padding:10px}.time{font-size:12px}
+  .bar button{padding:9px 11px;font-size:14px}.stage{padding:42px 14px 22px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+<div class="wrap">
+<h1 id="ttl"></h1>
+<div class="stage"><div class="badge" id="bdg"></div>
+  <p id="now"></p><p id="nextline"></p></div>
+<div class="bar">
+  <button class="play" id="pp">▶ 再生</button>
+  <button id="pv">◀ 前の字幕</button>
+  <button id="nx">次の字幕 ▶</button>
+  <button id="sp">等速</button>
+  <span class="time" id="tm">0:00 / 0:00</span>
+</div>
+<input type="range" id="sk" min="0" max="1000" value="0">
+<div class="marks" id="mk"></div>
+<div class="tabs"><button class="on">字幕</button></div>
+<div class="list" id="subs"></div>
+<p class="tip">スペース＝再生/停止　←→＝5秒送り　↑↓＝字幕送り。字幕をタップするとそこへ飛びます。</p>
+</div>
+<audio id="a" src="audio.mp3" preload="auto"></audio>
+<script>
+const D={"name": "昇進を打診された部下が返事の前に確かめる5つ", "file": "028_昇進を打診された部下が返事の前に確かめる5つ", "dur": 580.7, "segs": [], "subs": [{"t": 0.0, "x": "管理職の打診は、多くの場合\nまだ決定ではありません。"}, {"t": 4.016666666666667, "x": "相談の段階で来ると言われます。"}, {"t": 6.2, "x": "すぐに答えを出さなくてよい場合があります。"}, {"t": 8.933333333333334, "x": "受けるか断るかは少し後でも大丈夫です。"}, {"t": 11.8, "x": "大丈夫かどうかは、打診の言葉だけでは\n分かりません。"}, {"t": 15.7, "x": "分かるのは、返事の前にいくつか確かめた後です。"}, {"t": 19.183333333333334, "x": "上司はもう話を進めています。"}, {"t": 21.5, "x": "部下は断ると評価が下がる気がしています。"}, {"t": 24.266666666666666, "x": "その気持ちのまま即答すると、後で迷いやすいです。"}, {"t": 27.866666666666667, "x": "どちらを選んでも迷いが残ります。"}, {"t": 30.066666666666666, "x": "今日は返事の前に確かめる五つを並べます。"}, {"t": 33.016666666666666, "x": "面談室に呼ばれます。"}, {"t": 34.68333333333333, "x": "次の期から課をまとめてほしいと言われます。"}, {"t": 37.38333333333333, "x": "言われた側がまず考えることがあります。"}, {"t": 39.916666666666664, "x": "これは決まった話なのかどうかです。"}, {"t": 42.233333333333334, "x": "考えた末に、断れない話だと受け取ります。"}, {"t": 45.666666666666664, "x": "そういう人は少なくありません。"}, {"t": 47.766666666666666, "x": "少なくないのは、上司の口ぶりが\nはっきりしているからでしょうか。"}, {"t": 51.95, "x": "口ぶりのせいだけとは言い切れません。"}, {"t": 54.166666666666664, "x": "その上司は普段からはっきり話す人かもしれません。"}, {"t": 57.5, "x": "そういう場合も多いのです。"}, {"t": 59.38333333333333, "x": "では評価がかかっていると感じるからでしょうか。"}, {"t": 62.3, "x": "これも半分ほどです。"}, {"t": 63.8, "x": "残りの半分は別のところにあります。"}, {"t": 66.35, "x": "別のところとは、打診という\n言葉が置かれている段階です。"}, {"t": 70.53333333333333, "x": "段階で言えば、打診は辞令の\n前に来ることが多いと言われます。"}, {"t": 75.06666666666666, "x": "辞令の前なら、まだ動かせる\n部分があるかもしれません。"}, {"t": 78.81666666666666, "x": "残っている部分を探すのは上司の側です。"}, {"t": 81.73333333333333, "x": "そのために本人の考えを聞きに来ています。"}, {"t": 84.7, "x": "聞きに来た上司にとって、その場の\n即答はむしろ材料が足りません。"}, {"t": 89.23333333333333, "x": "足りないまま受けると、本人の\n事情が後から出てきやすいです。"}, {"t": 93.31666666666666, "x": "出てきた事情は決まったあとだと扱いにくくなります。"}, {"t": 96.5, "x": "調整の手間が大きくなるからです。"}, {"t": 98.76666666666667, "x": "上司はその手間を避けたいと考えます。"}, {"t": 101.26666666666667, "x": "だから早めに相談の形をとります。"}, {"t": 103.8, "x": "相談の形なら、少し時間をもらうことは\n失礼に当たりにくいです。"}, {"t": 108.53333333333333, "x": "当たりにくい理由は、上司が聞きたいことにあります。"}, {"t": 112.03333333333333, "x": "受けるかどうかの一言だけではないのです。"}, {"t": 114.48333333333333, "x": "一言の奥で知りたいのは、本人が\n今の仕事をどう見ているかです。"}, {"t": 118.86666666666666, "x": "見ている先が分かれば、上司は材料を手にできます。"}, {"t": 122.5, "x": "うえや人事に持ち帰る材料です。"}, {"t": 124.81666666666666, "x": "材料がそろうまで返事を少し待つこともあります。"}, {"t": 127.98333333333333, "x": "それは珍しいことではないと言われます。"}, {"t": 130.56666666666666, "x": "言われてみれば、少し不思議な話です。"}, {"t": 133.48333333333332, "x": "相談を持ちかけた側が即答を求めるのですから。"}, {"t": 136.73333333333332, "x": "不思議に思えたら、それが最初の手がかりです。"}, {"t": 139.95, "x": "手がかりが見えると、面談室の\n空気は少しやわらぎます。"}, {"t": 144.05, "x": "では、打診の前に何が起きていたかを見ていきます。"}, {"t": 147.88333333333333, "x": "打診の言葉が出る前のことです。"}, {"t": 150.06666666666666, "x": "上司の側ではいくつかの話が動いています。"}, {"t": 153.01666666666668, "x": "動いているのは下ごしらえです。"}, {"t": 155.0, "x": "上の役職への相談や人事との確認などです。"}, {"t": 158.23333333333332, "x": "下ごしらえが半分ほど済みます。"}, {"t": 160.51666666666668, "x": "そこで本人に声がかかる場合があります。"}, {"t": 163.28333333333333, "x": "場合によっては、上司自身も\n上から任された話を伝えに来ています。"}, {"t": 168.15, "x": "一方で部下の側はどうでしょうか。"}, {"t": 170.41666666666666, "x": "その日の面談で初めて話を聞くことが多いです。"}, {"t": 173.75, "x": "初めて聞く話には、いろいろな気持ちが混ざります。"}, {"t": 177.25, "x": "驚きと不安と、少しのうれしさです。"}, {"t": 180.13333333333333, "x": "気持ちの奥からは、別の思いも出てきます。"}, {"t": 183.1, "x": "今の仕事を続けたいという思いです。"}, {"t": 185.56666666666666, "x": "ただその思いは口にしにくいものです。"}, {"t": 187.96666666666667, "x": "言えば評価が下がる気がするからです。"}, {"t": 190.33333333333334, "x": "言いにくさの差は、話を知っていた\n時間の長さの差でもあります。"}, {"t": 194.6, "x": "上司は何週間も考えてきました。"}, {"t": 197.13333333333333, "x": "部下はその話を数分で受け止めようとしています。"}, {"t": 200.4, "x": "数分で出せる返事は、たいてい気持ちの\n表面の部分だけです。"}, {"t": 204.8, "x": "表面だけの返事でも、持ち帰られることがあります。"}, {"t": 208.43333333333334, "x": "上司はそれを本人の答えとして受け取るからです。"}, {"t": 211.6, "x": "持ち帰られた返事は、うえや人事との話に乗ります。"}, {"t": 215.46666666666667, "x": "その中で少しずつ固まっていきます。"}, {"t": 217.9, "x": "固まった後で本音を足すのは大変です。"}, {"t": 220.61666666666667, "x": "言い出す場が、なかなか来ないからです。"}, {"t": 223.25, "x": "受け止めきれない様子を、上司は\n乗り気でないと読むことがあります。"}, {"t": 227.3, "x": "読み違いの元は、この時間の\n差が見えていないことです。"}, {"t": 231.05, "x": "見えていない差を埋める近道があります。"}, {"t": 233.51666666666668, "x": "話がどこまで進んでいるかを聞くことです。"}, {"t": 236.35, "x": "聞き方は、誰とどこまで話が\n済んでいますか、という形です。"}, {"t": 241.13333333333333, "x": "形がやわらかければ、上司も\n答えやすいと言われます。"}, {"t": 244.91666666666666, "x": "聞かれた上司のほうも、迷っている場合があります。"}, {"t": 248.55, "x": "どこまで話してよいか分からないのです。"}, {"t": 250.93333333333334, "x": "迷いが見えたら、前置きを一つ足します。"}, {"t": 253.96666666666667, "x": "話せる範囲で構いません、と\n添えると答えが返りやすいです。"}, {"t": 258.28333333333336, "x": "答えを聞けば、動かせる部分と\n動かせない部分の境目が見えてきます。"}, {"t": 263.1333333333333, "x": "境目の内側で、次に確かめるのは仕事の中身です。"}, {"t": 267.1666666666667, "x": "管理職の話を聞くと、多くの\n人は増える仕事を数え始めます。"}, {"t": 271.81666666666666, "x": "数え始めるのは自然なことです。"}, {"t": 274.0, "x": "でもそれで迷いが晴れるでしょうか。"}, {"t": 276.15, "x": "晴れることは少ないと言われます。"}, {"t": 278.18333333333334, "x": "増える仕事の中身は、やってみないと\n見えにくいからです。"}, {"t": 282.0833333333333, "x": "では役職の重さを想像すれば\n決めやすくなるでしょうか。"}, {"t": 285.71666666666664, "x": "想像は大きくふくらみやすいものです。"}, {"t": 288.28333333333336, "x": "かえって足が止まることがあります。"}, {"t": 290.4166666666667, "x": "止まった足を動かすコツがあります。"}, {"t": 292.71666666666664, "x": "手放す仕事を先に聞いておくことです。"}, {"t": 295.31666666666666, "x": "今抱えている担当があります。"}, {"t": 297.3833333333333, "x": "そのうちどれを、誰に渡すことになるのでしょうか。"}, {"t": 301.05, "x": "渡す先が決まっていないこともあります。"}, {"t": 303.43333333333334, "x": "そのときは二つの仕事を同時に持つ期間が出てきます。"}, {"t": 306.8, "x": "その長さで、最初の数ヶ月の\n忙しさはかなり変わります。"}, {"t": 311.05, "x": "変わるのは忙しさだけではありません。"}, {"t": 313.4166666666667, "x": "今の担当先との関係も変わります。"}, {"t": 316.01666666666665, "x": "長く付き合ってきた相手もいます。"}, {"t": 318.1, "x": "その相手を急に別の人へ引き継ぐかもしれません。"}, {"t": 321.31666666666666, "x": "引き継ぎの段取りが見えないと、\n踏み出しにくくなります。"}, {"t": 324.9, "x": "受ける気持ちがあっても同じです。"}, {"t": 326.8666666666667, "x": "踏み出しにくさの正体が分かると、\n迷いは整理しやすくなります。"}, {"t": 331.31666666666666, "x": "こうした事情は増える仕事の\n一覧からは読み取れません。"}, {"t": 334.76666666666665, "x": "そこを聞かれると、上司は少し考える\n顔になるかもしれません。"}, {"t": 339.05, "x": "考える顔になるのには理由があります。"}, {"t": 341.65, "x": "そこがまだ決まっていない場合が多いのです。"}, {"t": 344.3333333333333, "x": "多いと分かっていれば、慌てずに済みます。"}, {"t": 347.3666666666667, "x": "答えが曖昧でも、責める気持ちにはなりにくいです。"}, {"t": 350.9, "x": "一緒に決められるなら、相談はまだ続いています。"}, {"t": 354.3833333333333, "x": "続いていると分かれば、打診は\n通知から話し合いに変わっていきます。"}, {"t": 359.1333333333333, "x": "変わった話し合いの中で、ようやく続けたい\n仕事の話ができます。"}, {"t": 363.73333333333335, "x": "断りたい気持ちがある場合もあります。"}, {"t": 366.18333333333334, "x": "そのときは理由の伝え方で受け取られ方が\n変わります。"}, {"t": 369.55, "x": "変わりやすいのは、\n自信がないや向いていないといった言い方です。"}, {"t": 373.65, "x": "言い方としては正直です。"}, {"t": 375.48333333333335, "x": "でも上司には別の意味で届く場合があります。"}, {"t": 378.3666666666667, "x": "届き方が変わるのは、上司が\n本人を推した側でもあるからです。"}, {"t": 382.73333333333335, "x": "推した側にとって、自信がないという返事は\n重く響きます。"}, {"t": 386.8833333333333, "x": "見込み違いだったとも聞こえるからです。"}, {"t": 389.2, "x": "響いた言葉は、上司が上に説明するときの\n材料にもなりにくいです。"}, {"t": 393.98333333333335, "x": "材料が無いと、上司は次の手を考えにくくなります。"}, {"t": 397.9166666666667, "x": "一方で部下のほうは今の仕事に愛着があります。"}, {"t": 401.1333333333333, "x": "だからこそ迷っています。"}, {"t": 402.78333333333336, "x": "迷いの中身は具体的です。"}, {"t": 404.7, "x": "担当している客先や育てている\n後輩、手がけている改善です。"}, {"t": 409.15, "x": "中身はあります。"}, {"t": 410.35, "x": "それなのに、口に出すと気持ちの\n弱さに聞こえてしまいます。"}, {"t": 414.23333333333335, "x": "聞こえ方を変える方法があります。"}, {"t": 416.48333333333335, "x": "理由を今の仕事の続け方として言い直すことです。"}, {"t": 419.75, "x": "言い直すと、この改善を来年まで\n見届けたい、という形になります。"}, {"t": 424.68333333333334, "x": "今の後輩が独り立ちするまで見ていたい、という\n形もあります。"}, {"t": 428.9, "x": "どちらも、やる気がないという話ではありません。"}, {"t": 432.25, "x": "やりたいことがあるという伝えかたです。"}, {"t": 434.6, "x": "形が具体的だと、上司も案を考えやすくなります。"}, {"t": 438.43333333333334, "x": "時期をずらす案や役割を分ける案です。"}, {"t": 441.1666666666667, "x": "考える余地が生まれることもあります。"}, {"t": 443.46666666666664, "x": "そうなれば、断ることが評価を\n下げるとは限らないと言われます。"}, {"t": 447.78333333333336, "x": "限らない理由は、続けたい仕事の\n話が意欲の話でもあるからです。"}, {"t": 452.51666666666665, "x": "意欲として届けば、次の打診の\n時期を相談する入り口にもなります。"}, {"t": 457.1166666666667, "x": "入り口を残して話を終えるには、\nもう一つ決めることがあります。"}, {"t": 461.4, "x": "打診の面談は、返事の期日が\n曖昧なまま終わることがあります。"}, {"t": 465.8, "x": "曖昧なまま終わると、何が起きやすいでしょうか。"}, {"t": 469.26666666666665, "x": "一つ目に浮かぶのは、すぐ答えなければという\n焦りです。"}, {"t": 473.01666666666665, "x": "焦りはたしかに出ます。"}, {"t": 474.56666666666666, "x": "けれどそれだけでは終わりません。"}, {"t": 476.51666666666665, "x": "二つ目に浮かぶのは、ずるずると\n先延ばしになるという答えです。"}, {"t": 480.65, "x": "先延ばしも起きます。"}, {"t": 482.15, "x": "もっと困るのは別のことです。"}, {"t": 484.06666666666666, "x": "別のこととは、上司と部下で\n思う期日がずれていくことです。"}, {"t": 488.1, "x": "ずれたまま、上司は週明けには\n返事が来ると思っています。"}, {"t": 492.1666666666667, "x": "部下のほうは、月の終わりまでに\n考えればいいと受け取っています。"}, {"t": 496.3333333333333, "x": "受け取り方の差は広がりやすいものです。"}, {"t": 498.85, "x": "評価面談の時期が近いと、なおさらです。"}, {"t": 501.96666666666664, "x": "広がる前に、手を打っておきます。"}, {"t": 504.6333333333333, "x": "面談室を出る前に、期日を決めてもらうと安心です。"}, {"t": 508.6666666666667, "x": "決めた日までは迷っていてよいと分かるからです。"}, {"t": 511.46666666666664, "x": "分かっていれば、相談する時間も取れます。"}, {"t": 514.5, "x": "家族や身近な人に話してみる時間です。"}, {"t": 517.1833333333333, "x": "期日の決め方には目安があります。"}, {"t": 519.5166666666667, "x": "来週の金曜までに一度お返事します、という形です。"}, {"t": 523.7833333333333, "x": "一度と付けておくのがコツです。"}, {"t": 525.7833333333333, "x": "その日に迷いが残っていても、\n途中の考えを伝えられます。"}, {"t": 530.0, "x": "途中の考えも、上司には次の相談の材料になります。"}, {"t": 534.1333333333333, "x": "そのあいだに残りの四つを一つずつ確かめられます。"}, {"t": 537.3833333333333, "x": "確かめた材料をそろえて返事をします。"}, {"t": 539.9833333333333, "x": "そうすれば、どちらに決めても話は前に進みます。"}, {"t": 543.6666666666666, "x": "五つの中から一つだけ選ぶとします。"}, {"t": 546.1666666666666, "x": "明日の返事に一番効くのは三つ目です。"}, {"t": 548.9333333333333, "x": "手放す仕事を聞くと、打診の\n中身が一気に具体的になります。"}, {"t": 553.6333333333333, "x": "具体的になれば、まだ決まっていない部分も\n見えてきます。"}, {"t": 557.3833333333333, "x": "見えてきた部分は、上司と一緒に\n決められる余地です。"}, {"t": 560.95, "x": "余地があると分かれば、受けるか\n断るかは急がなくて済みます。"}, {"t": 565.0666666666667, "x": "急がずに話せる場では、別の話が出てきます。"}, {"t": 568.5333333333333, "x": "上司が本当に聞きたかった続け方の話です。"}], "w": 720, "h": 405, "n_cuts": 0, "noimage": true};
+const a=document.getElementById('a');
+const now=document.getElementById('now'), nl=document.getElementById('nextline');
+const pp=document.getElementById('pp'), sk=document.getElementById('sk');
+const tm=document.getElementById('tm'), bdg=document.getElementById('bdg');
+const SMOOTH=matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
+document.getElementById('ttl').innerHTML=D.name+
+  '<span class="meta">'+fmt(D.dur)+'　字幕'+D.subs.length+'　（音声＋字幕だけ）</span>';
+
+function fmt(s){s=Math.max(0,s|0);return (s/60|0)+':'+String(s%60).padStart(2,'0')}
+function subIdx(t){let lo=0,hi=D.subs.length-1,r=-1;
+  while(lo<=hi){const m=(lo+hi)>>1; if(D.subs[m].t<=t){r=m;lo=m+1}else hi=m-1} return r}
+
+let cur=-2;
+function paint(t){
+  const i=subIdx(t);
+  if(i!==cur){cur=i;
+    now.textContent = i<0 ? (D.subs.length?'（ここはまだ字幕がありません）'
+                                          :'（この回に字幕はありません）')
+                         : D.subs[i].x;
+    const n=D.subs[i+1]; nl.textContent = n ? '次　'+n.x : '';
+    bdg.textContent = D.subs.length ? '字幕 '+(i+1)+' / '+D.subs.length : '字幕なし';
+    mark('subs',i);
+  }
+  tm.textContent=fmt(t)+' / '+fmt(D.dur);
+  if(!sk.dragging) sk.value=Math.round(t/D.dur*1000);
+}
+function mark(pane,i){
+  const el=document.getElementById(pane);
+  if(el.dataset.on==i) return; el.dataset.on=i;
+  el.querySelectorAll('.on').forEach(x=>x.classList.remove('on'));
+  const t=el.children[i]; if(!t) return; t.classList.add('on');
+  if(!el.hidden){const r=t.offsetTop-el.clientHeight/2; el.scrollTo({top:r,behavior:SMOOTH})}
+}
+
+D.subs.forEach(s=>{const d=document.createElement('div');d.className='row';
+  d.innerHTML='<b></b><span></span>';
+  d.querySelector('b').textContent=fmt(s.t);
+  d.querySelector('span').textContent=s.x;
+  d.onclick=()=>go(s.t); document.getElementById('subs').appendChild(d)});
+const mk=document.getElementById('mk');
+D.subs.forEach(s=>{const i=document.createElement('i');
+  i.style.left=(s.t/D.dur*100)+'%'; mk.appendChild(i)});
+
+function go(t){a.currentTime=Math.min(Math.max(0,t)+0.01,Math.max(0.05,D.dur-0.05)); paint(a.currentTime)}
+pp.onclick=()=>a.paused?a.play():a.pause();
+const SPEEDS=[1,1.25,1.5,1.75,2,3,0.75],SPN=['等速','1.25倍','1.5倍','1.75倍','2倍','3倍','0.75倍'];
+let si=0; const sp=document.getElementById('sp');
+sp.onclick=()=>{si=(si+1)%SPEEDS.length; a.playbackRate=SPEEDS[si];
+  a.preservesPitch=a.mozPreservesPitch=a.webkitPreservesPitch=true; sp.textContent=SPN[si]};
+a.onplay=()=>pp.textContent='❚❚ 停止'; a.onpause=()=>pp.textContent='▶ 再生';
+a.ontimeupdate=()=>paint(a.currentTime);
+sk.oninput=()=>{sk.dragging=1; go(sk.value/1000*D.dur)};
+sk.onchange=()=>sk.dragging=0;
+document.getElementById('pv').onclick=()=>{const i=subIdx(a.currentTime);
+  go(i>0?D.subs[i-1].t:0)};
+document.getElementById('nx').onclick=()=>{const i=subIdx(a.currentTime);
+  if(i+1<D.subs.length) go(D.subs[i+1].t)};
+addEventListener('keydown',e=>{const k=e.key;
+  if(k===' '){e.preventDefault();pp.onclick()}
+  else if(k==='ArrowRight')go(a.currentTime+5); else if(k==='ArrowLeft')go(a.currentTime-5);
+  else if(k==='ArrowDown'){e.preventDefault();document.getElementById('nx').onclick()}
+  else if(k==='ArrowUp'){e.preventDefault();document.getElementById('pv').onclick()}
+  else if(k==='s'||k==='S')sp.onclick()});
+paint(0);
+</script>
