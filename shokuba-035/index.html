@@ -1,0 +1,133 @@
+<title>休みを言い出しにくい部下が先に決めておく5つ</title>
+<style>
+:root{--bg:#f6f4f1;--panel:#fffefc;--ink:#1c1a19;--dim:#6e6862;--line:#e2ded7;--accent:#b8422f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17161a;--panel:#201e23;--ink:#ece8e4;--dim:#9b948d;--line:#33303a;--accent:#e0705a}}
+:root[data-theme="dark"]{--bg:#17161a;--panel:#201e23;--ink:#ece8e4;--dim:#9b948d;--line:#33303a;--accent:#e0705a}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);margin:0;-webkit-text-size-adjust:100%;
+  font:16px/1.7 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic UI",sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+h1{font-size:17px;margin:4px 0 14px;font-weight:600;letter-spacing:.02em}
+.meta{color:var(--dim);font-size:13px;font-weight:400;margin-left:8px}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:12px;position:relative;
+  min-height:40vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:46px 20px 26px;box-shadow:0 2px 14px rgba(0,0,0,.10)}
+#now{margin:0;text-align:center;white-space:pre-wrap;word-break:break-word;font-weight:700;
+  font-size:clamp(23px,5.4vw,42px);line-height:1.5;letter-spacing:.01em}
+#nextline{margin:16px 0 0;text-align:center;white-space:pre-wrap;word-break:break-word;
+  color:var(--dim);font-size:clamp(13px,2.8vw,17px);line-height:1.6}
+.badge{position:absolute;left:12px;top:12px;background:rgba(127,127,127,.16);color:var(--dim);
+  font-size:12px;padding:3px 9px;border-radius:20px;line-height:1.6;letter-spacing:.04em}
+.bar{display:flex;align-items:center;gap:10px;margin:12px 0 6px;flex-wrap:wrap}
+button{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;
+  padding:9px 14px;font-size:15px;cursor:pointer;font-family:inherit}
+button:active{transform:translateY(1px)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.play{background:var(--accent);color:#fff;border-color:transparent;min-width:80px;font-weight:600}
+.time{font-variant-numeric:tabular-nums;color:var(--dim);font-size:13px;margin-left:auto}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.marks{position:relative;height:7px;margin:2px 0 14px}
+.marks i{position:absolute;top:0;width:1px;height:7px;background:var(--line)}
+.tabs{display:flex;gap:6px;margin:18px 0 10px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;background:none;
+  color:var(--ink);padding:7px 12px;font-weight:600}
+.list{max-height:46vh;overflow:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel);
+  -webkit-overflow-scrolling:touch}
+.row{display:flex;gap:12px;padding:11px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.row:last-child{border-bottom:0}
+.row:hover{background:rgba(127,127,127,.07)}
+.row.on{background:rgba(184,66,47,.12)}
+.row b{color:var(--dim);font-variant-numeric:tabular-nums;font-weight:500;font-size:13px;
+  min-width:48px;flex:none;padding-top:2px}
+.row span{white-space:pre-wrap;flex:1;font-size:16px;line-height:1.65}
+.tip{color:var(--dim);font-size:12.5px;margin:10px 2px 0}
+@media(max-width:620px){.wrap{padding:10px}.time{font-size:12px}
+  .bar button{padding:9px 11px;font-size:14px}.stage{padding:42px 14px 22px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+<div class="wrap">
+<h1 id="ttl"></h1>
+<div class="stage"><div class="badge" id="bdg"></div>
+  <p id="now"></p><p id="nextline"></p></div>
+<div class="bar">
+  <button class="play" id="pp">▶ 再生</button>
+  <button id="pv">◀ 前の字幕</button>
+  <button id="nx">次の字幕 ▶</button>
+  <button id="sp">等速</button>
+  <span class="time" id="tm">0:00 / 0:00</span>
+</div>
+<input type="range" id="sk" min="0" max="1000" value="0">
+<div class="marks" id="mk"></div>
+<div class="tabs"><button class="on">字幕</button></div>
+<div class="list" id="subs"></div>
+<p class="tip">スペース＝再生/停止　←→＝5秒送り　↑↓＝字幕送り。字幕をタップするとそこへ飛びます。</p>
+</div>
+<audio id="a" src="audio.mp3" preload="auto"></audio>
+<script>
+const D={"name": "休みを言い出しにくい部下が先に決めておく5つ", "file": "035_休みを言い出しにくい部下が先に決めておく5つ", "dur": 551.8333125, "segs": [], "subs": [{"t": 0.0, "x": "休みを言い出すとき、上司が\n気にしやすいことがあります。"}, {"t": 3.716666666666667, "x": "休む理由より、その日の仕事の\n回り方だと言われます。"}, {"t": 7.666666666666667, "x": "上司は休んでほしいと思っています。"}, {"t": 10.216666666666667, "x": "ただ何が止まるかが見えないと、落ち着きません。"}, {"t": 13.316666666666666, "x": "一方で部下は一言目で迷います。"}, {"t": 15.65, "x": "休んでよいと分かっていても、\n切り出し方が決まらないのです。"}, {"t": 19.6, "x": "迷いの多くは伝える前の段取りでほどけます。"}, {"t": 22.5, "x": "決めておくことは五つで足ります。"}, {"t": 24.516666666666666, "x": "順に見ていきます。"}, {"t": 25.85, "x": "休みを伝えるとき、多くの人は理由から考え始めます。"}, {"t": 29.95, "x": "どこまで話せば納得してもらえるでしょうか。"}, {"t": 32.71666666666667, "x": "長く説明すれば伝わるでしょうか。"}, {"t": 35.06666666666667, "x": "説明が長いとどうなるでしょうか。"}, {"t": 37.28333333333333, "x": "かえって迷っているように聞こえる場合があります。"}, {"t": 40.31666666666667, "x": "では理由を伏せればよいのでしょうか。"}, {"t": 42.56666666666667, "x": "伏せたままだと、相手が想像で埋めることがあります。"}, {"t": 46.083333333333336, "x": "想像はたいてい実際より重くなりやすいものです。"}, {"t": 49.36666666666667, "x": "重い想像は上司の心配を必要以上にふくらませます。"}, {"t": 53.2, "x": "答えは三つ目にあります。"}, {"t": 54.983333333333334, "x": "一言で済む形に整えておくことです。"}, {"t": 57.68333333333333, "x": "用事があってお休みをいただきたいです、という\n形です。"}, {"t": 61.75, "x": "家のことで休みます、という形もあります。"}, {"t": 65.08333333333333, "x": "どちらも、聞けばすぐ分かる長さです。"}, {"t": 67.9, "x": "短い一言には、決めてきたという響きがあります。"}, {"t": 71.41666666666667, "x": "響きが落ち着いていると、聞く上司も\n構えずに済みます。"}, {"t": 75.26666666666667, "x": "構えずに済めば、話はすぐ次へ進みます。"}, {"t": 78.6, "x": "次とは、その日の仕事をどう回すかという話です。"}, {"t": 82.26666666666667, "x": "上司が気にしているのは、\nむしろそちらだと言われます。"}, {"t": 85.7, "x": "理由の中身を細かく聞かれることは多くありません。"}, {"t": 88.88333333333334, "x": "聞かれたときだけ、言える範囲で足せば足ります。"}, {"t": 92.2, "x": "足す言葉も前もって一つ決めておくと安心です。"}, {"t": 95.36666666666666, "x": "決めておけば、その場で言葉を探さずに済みます。"}, {"t": 98.83333333333333, "x": "探さずに済むと声の調子も落ち着きます。"}, {"t": 101.63333333333334, "x": "落ち着いた一言が、残りの話を短くしてくれます。"}, {"t": 105.41666666666667, "x": "短くなったぶんだけ、上司は\n段取りの話に時間を使えます。"}, {"t": 109.86666666666666, "x": "理由を長く話した日と比べると、\nその差ははっきりします。"}, {"t": 113.93333333333334, "x": "長い説明のあとは、聞く上司も迷います。"}, {"t": 117.23333333333333, "x": "どこに返事をすればよいか分からないのです。"}, {"t": 119.88333333333334, "x": "迷った上司は、ひとまず考えておくと答えがちです。"}, {"t": 123.61666666666666, "x": "その一言で話はまた先へ延びてしまいます。"}, {"t": 126.65, "x": "一言の理由は、そうした先延ばしを\n減らす下ごしらえです。"}, {"t": 130.78333333333333, "x": "休みを伝える日は、いつがよいのでしょうか。"}, {"t": 133.88333333333333, "x": "早ければ早いほどよいと考える人は多いです。"}, {"t": 137.01666666666668, "x": "早さはたしかに助けになります。"}, {"t": 139.11666666666667, "x": "けれど早さだけでは決まりません。"}, {"t": 141.2, "x": "では上司の機嫌がよさそうな日でしょうか。"}, {"t": 143.83333333333334, "x": "機嫌は外から読みにくいものです。"}, {"t": 146.06666666666666, "x": "読み違えると、かえって言い出しにくくなります。"}, {"t": 149.3, "x": "顔色をうかがううちに、言い\n出す日が過ぎることもあります。"}, {"t": 153.11666666666667, "x": "目安になるのは忙しさの山です。"}, {"t": 155.48333333333332, "x": "月末の締めや大きな納期の前を思い浮かべます。"}, {"t": 158.73333333333332, "x": "見積の山や、月初めの報告の山もあります。"}, {"t": 162.45, "x": "山の手前では、上司の頭は目の\n前の仕事で埋まっています。"}, {"t": 166.76666666666668, "x": "埋まった頭には先の休みの話が\n入りにくいと言われます。"}, {"t": 170.6, "x": "入りにくいと、返事が曖昧なまま\n流れることがあります。"}, {"t": 174.45, "x": "流れた話をもう一度切り出すのは気が重いものです。"}, {"t": 177.88333333333333, "x": "山を一つ越えたあとなら、事情が変わります。"}, {"t": 181.11666666666667, "x": "上司の頭に少しだけ空きが出ています。"}, {"t": 183.75, "x": "空きがあれば、先の予定を落ち着いて考えられます。"}, {"t": 187.4, "x": "休みの日付は次の山より手前に置くのが無難です。"}, {"t": 190.83333333333334, "x": "手前に置けば、\n山の準備を休み明けから始められます。"}, {"t": 194.7, "x": "言い出す日と休む日を、一緒に\n眺めておくのがコツです。"}, {"t": 198.68333333333334, "x": "二つの日付が並ぶと段取りが伝わりやすくなります。"}, {"t": 201.95, "x": "並べた日付はメモに書いて持って行くと安心です。"}, {"t": 205.13333333333333, "x": "口だけで伝えると、\n数字は聞き流されやすいからです。"}, {"t": 208.93333333333334, "x": "メモがあれば上司はその場で\n予定表と見比べられます。"}, {"t": 212.33333333333334, "x": "見比べてから返事ができると、上司の迷いも減ります。"}, {"t": 216.03333333333333, "x": "迷いが減れば返事はその日のうちに来やすくなります。"}, {"t": 219.2, "x": "早い返事は部下の気持ちも軽くしてくれます。"}, {"t": 221.96666666666667, "x": "休みの話で、上司の頭に浮かぶものがあります。"}, {"t": 225.66666666666666, "x": "その日に止まるかもしれない仕事です。"}, {"t": 228.01666666666668, "x": "客先からの返事や締めの近い\n書類、毎朝の数字の確認です。"}, {"t": 232.96666666666667, "x": "そういう細かい仕事が一つずつ気になります。"}, {"t": 235.85, "x": "一方で部下の頭にあるのは休みの日付です。"}, {"t": 238.91666666666666, "x": "いつ休むか、どう伝えるか、誰に頼むかです。"}, {"t": 242.78333333333333, "x": "そういう段取りの順番で頭がいっぱいになります。"}, {"t": 246.0, "x": "二人が見ているものは少しずれています。"}, {"t": 248.46666666666667, "x": "ずれたまま話すと、上司は質問を重ねます。"}, {"t": 251.83333333333334, "x": "あの件はどうなっているのか、という質問です。"}, {"t": 255.11666666666667, "x": "質問が続くと、部下は責められている気がしてきます。"}, {"t": 258.73333333333335, "x": "上司のほうも問い詰めたいわけではないのです。"}, {"t": 261.46666666666664, "x": "けれど上司が欲しいのは止まる仕事の一覧です。"}, {"t": 264.6, "x": "休むことを止めたいわけではないと言われます。"}, {"t": 267.3333333333333, "x": "だから一覧を先に作っておきます。"}, {"t": 269.73333333333335, "x": "一枚の紙に、その日の仕事を書き出します。"}, {"t": 273.01666666666665, "x": "止まってよいもの、頼みたいもの、\n前の日に済ませるものです。"}, {"t": 277.2, "x": "三つに分けるだけで見通しはずいぶん良くなります。"}, {"t": 280.2, "x": "頼みたいものには頼む相手の名前を添えます。"}, {"t": 283.1333333333333, "x": "名前があると、上司は誰に聞けばよいか分かります。"}, {"t": 286.76666666666665, "x": "添える前に、相手に一声かけておくと安心です。"}, {"t": 290.46666666666664, "x": "一枚があれば、上司は質問の代わりに確認をします。"}, {"t": 294.55, "x": "確認で済む話は短く終わりやすいです。"}, {"t": 297.53333333333336, "x": "短く終われば、休みの話は重くなりません。"}, {"t": 301.1, "x": "確認だけなら上司も首をかしげずに済みます。"}, {"t": 304.05, "x": "紙は印刷しなくても構いません。"}, {"t": 306.3, "x": "チャットに貼れる短いメモでも足ります。"}, {"t": 308.71666666666664, "x": "大事なのは、上司と同じものを\n見ながら話せることです。"}, {"t": 312.43333333333334, "x": "同じものを見ていると抜けている\n仕事にも気づきやすくなります。"}, {"t": 315.95, "x": "気づいた抜けは、その場で一行足せば済みます。"}, {"t": 319.2, "x": "足した一行が休みの日の安心につながります。"}, {"t": 322.3, "x": "休みが決まると、周りへの知らせ方が気になります。"}, {"t": 325.9166666666667, "x": "上司は課の全員に知っておいてほしいと考えます。"}, {"t": 329.2, "x": "誰が休むか、誰が何を受けるか、いつ戻るかです。"}, {"t": 333.46666666666664, "x": "そういう全体の見取り図を早めにそろえたいのです。"}, {"t": 336.6666666666667, "x": "一方で部下は大げさにしたくないと感じます。"}, {"t": 339.53333333333336, "x": "名前が出ることや、注目されることや、\n気を遣わせることです。"}, {"t": 344.1166666666667, "x": "そういう目立ち方をできれば避けたいのです。"}, {"t": 346.76666666666665, "x": "二人の気持ちは反対のようにも見えます。"}, {"t": 349.35, "x": "片方をかなえると、もう片方が\nかないにくいように思えます。"}, {"t": 353.43333333333334, "x": "でもぶつかっているのは気持ちそのものとは違います。"}, {"t": 356.46666666666664, "x": "一つの知らせ方に二つの役目を乗せていることです。"}, {"t": 359.71666666666664, "x": "けれど知らせ方を二つに分けると、\n両方がかないます。"}, {"t": 363.5, "x": "一つは朝礼での短い連絡です。"}, {"t": 366.03333333333336, "x": "朝礼は、課の全員がそろう数少ない場です。"}, {"t": 369.3833333333333, "x": "休む日と戻る日だけを一言で伝えます。"}, {"t": 372.0833333333333, "x": "細かい中身はそこでは広げません。"}, {"t": 374.4166666666667, "x": "もう一つはチャットの一行です。"}, {"t": 376.56666666666666, "x": "こちらは、休む本人が書いておきます。"}, {"t": 379.51666666666665, "x": "頼みたい仕事と、頼む相手を書いておきます。"}, {"t": 382.76666666666665, "x": "書いた一行はあとから何度でも読み返せます。"}, {"t": 385.71666666666664, "x": "読み返せるので、口で伝えた中身の抜けを補えます。"}, {"t": 389.5833333333333, "x": "朝礼は顔の見える知らせで、\nチャットは残る知らせです。"}, {"t": 393.53333333333336, "x": "役目が分かれると、どちらも短くて済みます。"}, {"t": 396.85, "x": "短い知らせなら目立ち方もずっと小さくなります。"}, {"t": 399.98333333333335, "x": "上司にとっても、見取り図が二か所にそろいます。"}, {"t": 403.26666666666665, "x": "順番にもコツがあります。"}, {"t": 405.03333333333336, "x": "先にチャットの一行を書いておきます。"}, {"t": 407.48333333333335, "x": "朝礼ではそれを指すだけにします。"}, {"t": 409.73333333333335, "x": "詳しくはチャットに書きました、と添えれば足ります。"}, {"t": 413.03333333333336, "x": "添えた一言で朝礼の時間を取らずに済みます。"}, {"t": 416.15, "x": "済んだあとに質問が来ても、\n一行を見ながら答えられます。"}, {"t": 420.3, "x": "答えるたびに説明し直す手間も省けます。"}, {"t": 423.06666666666666, "x": "休み明けの朝、最初に何をするとよいでしょうか。"}, {"t": 426.65, "x": "たまった仕事をすぐに片づけ始める人は多いです。"}, {"t": 429.93333333333334, "x": "片づけたい気持ちは自然です。"}, {"t": 431.96666666666664, "x": "ただ急ぐほど、取りこぼしが出やすくなります。"}, {"t": 435.06666666666666, "x": "では、まず上司にお礼を言いに行くのが\nよいでしょうか。"}, {"t": 438.75, "x": "お礼はもちろん大切です。"}, {"t": 440.6333333333333, "x": "短い一言でじゅうぶんに伝わります。"}, {"t": 443.01666666666665, "x": "けれどそれだけで朝が整うわけではありません。"}, {"t": 445.93333333333334, "x": "三つ目の答えがあります。"}, {"t": 447.65, "x": "最初の一時間を確認だけに空けることです。"}, {"t": 450.6166666666667, "x": "休んでいた日に何が起きたかを確かめます。"}, {"t": 453.3833333333333, "x": "チャットの流れや届いたメール、\n頼んだ仕事の行方です。"}, {"t": 457.4, "x": "確かめる時間があると、上司も\n話しかけやすくなります。"}, {"t": 461.2, "x": "この件はこう決まった、と短く伝えられるからです。"}, {"t": 464.9, "x": "伝える場が決まっていれば上司の段取りも\n組みやすいです。"}, {"t": 468.3333333333333, "x": "休み明けの予定まで決めてあると、\n休みの話は軽くなります。"}, {"t": 472.81666666666666, "x": "戻ったあとが見えているからです。"}, {"t": 474.8666666666667, "x": "見えていれば、送り出す上司も安心できます。"}, {"t": 478.15, "x": "安心は次の休みにもつながります。"}, {"t": 480.6666666666667, "x": "次の一言目が言い出しやすくなります。"}, {"t": 483.1, "x": "つながるのは、休みが一回では終わらないからです。"}, {"t": 486.6166666666667, "x": "一回目を軽く回せた経験が、\n二回目の一言目を楽にします。"}, {"t": 491.18333333333334, "x": "確認の一時間は予定表に先に書いておきます。"}, {"t": 494.48333333333335, "x": "書いておくと守りやすいです。"}, {"t": 496.35, "x": "書いていないと、つい頼まれごとで\n埋まってしまいます。"}, {"t": 499.78333333333336, "x": "埋まってしまえば、確認は延びます。"}, {"t": 502.4166666666667, "x": "お昼過ぎまでずれ込むこともあります。"}, {"t": 504.7, "x": "延びたぶん、休んでいた日の話が\n伝わるのも遅れます。"}, {"t": 508.8666666666667, "x": "遅れると上司が同じ説明を何度もすることになります。"}, {"t": 512.3666666666667, "x": "一時間を空けておけば、その手間は一度で済みます。"}, {"t": 515.95, "x": "今日の五つのうち、持ち帰るなら三つ目です。"}, {"t": 519.2666666666667, "x": "止まる仕事を一枚に書くと、\n残りの四つも決めやすくなります。"}, {"t": 523.6166666666667, "x": "理由は一言で足り、言い出す日も\n選びやすくなります。"}, {"t": 527.35, "x": "朝礼とチャットに書く中身も、\nその一枚から出てきます。"}, {"t": 531.15, "x": "休み明けに確かめる順番も同じ紙に並びます。"}, {"t": 534.4, "x": "一枚の紙は、上司と部下が同じものを\n見るための道具です。"}, {"t": 538.4666666666667, "x": "同じものが見えていれば、休みの\n一言目はずっと短くなります。"}], "w": 720, "h": 405, "n_cuts": 0, "noimage": true};
+const a=document.getElementById('a');
+const now=document.getElementById('now'), nl=document.getElementById('nextline');
+const pp=document.getElementById('pp'), sk=document.getElementById('sk');
+const tm=document.getElementById('tm'), bdg=document.getElementById('bdg');
+const SMOOTH=matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
+document.getElementById('ttl').innerHTML=D.name+
+  '<span class="meta">'+fmt(D.dur)+'　字幕'+D.subs.length+'　（音声＋字幕だけ）</span>';
+
+function fmt(s){s=Math.max(0,s|0);return (s/60|0)+':'+String(s%60).padStart(2,'0')}
+function subIdx(t){let lo=0,hi=D.subs.length-1,r=-1;
+  while(lo<=hi){const m=(lo+hi)>>1; if(D.subs[m].t<=t){r=m;lo=m+1}else hi=m-1} return r}
+
+let cur=-2;
+function paint(t){
+  const i=subIdx(t);
+  if(i!==cur){cur=i;
+    now.textContent = i<0 ? (D.subs.length?'（ここはまだ字幕がありません）'
+                                          :'（この回に字幕はありません）')
+                         : D.subs[i].x;
+    const n=D.subs[i+1]; nl.textContent = n ? '次　'+n.x : '';
+    bdg.textContent = D.subs.length ? '字幕 '+(i+1)+' / '+D.subs.length : '字幕なし';
+    mark('subs',i);
+  }
+  tm.textContent=fmt(t)+' / '+fmt(D.dur);
+  if(!sk.dragging) sk.value=Math.round(t/D.dur*1000);
+}
+function mark(pane,i){
+  const el=document.getElementById(pane);
+  if(el.dataset.on==i) return; el.dataset.on=i;
+  el.querySelectorAll('.on').forEach(x=>x.classList.remove('on'));
+  const t=el.children[i]; if(!t) return; t.classList.add('on');
+  if(!el.hidden){const r=t.offsetTop-el.clientHeight/2; el.scrollTo({top:r,behavior:SMOOTH})}
+}
+
+D.subs.forEach(s=>{const d=document.createElement('div');d.className='row';
+  d.innerHTML='<b></b><span></span>';
+  d.querySelector('b').textContent=fmt(s.t);
+  d.querySelector('span').textContent=s.x;
+  d.onclick=()=>go(s.t); document.getElementById('subs').appendChild(d)});
+const mk=document.getElementById('mk');
+D.subs.forEach(s=>{const i=document.createElement('i');
+  i.style.left=(s.t/D.dur*100)+'%'; mk.appendChild(i)});
+
+function go(t){a.currentTime=Math.min(Math.max(0,t)+0.01,Math.max(0.05,D.dur-0.05)); paint(a.currentTime)}
+pp.onclick=()=>a.paused?a.play():a.pause();
+const SPEEDS=[1,1.25,1.5,1.75,2,3,0.75],SPN=['等速','1.25倍','1.5倍','1.75倍','2倍','3倍','0.75倍'];
+let si=0; const sp=document.getElementById('sp');
+sp.onclick=()=>{si=(si+1)%SPEEDS.length; a.playbackRate=SPEEDS[si];
+  a.preservesPitch=a.mozPreservesPitch=a.webkitPreservesPitch=true; sp.textContent=SPN[si]};
+a.onplay=()=>pp.textContent='❚❚ 停止'; a.onpause=()=>pp.textContent='▶ 再生';
+a.ontimeupdate=()=>paint(a.currentTime);
+sk.oninput=()=>{sk.dragging=1; go(sk.value/1000*D.dur)};
+sk.onchange=()=>sk.dragging=0;
+document.getElementById('pv').onclick=()=>{const i=subIdx(a.currentTime);
+  go(i>0?D.subs[i-1].t:0)};
+document.getElementById('nx').onclick=()=>{const i=subIdx(a.currentTime);
+  if(i+1<D.subs.length) go(D.subs[i+1].t)};
+addEventListener('keydown',e=>{const k=e.key;
+  if(k===' '){e.preventDefault();pp.onclick()}
+  else if(k==='ArrowRight')go(a.currentTime+5); else if(k==='ArrowLeft')go(a.currentTime-5);
+  else if(k==='ArrowDown'){e.preventDefault();document.getElementById('nx').onclick()}
+  else if(k==='ArrowUp'){e.preventDefault();document.getElementById('pv').onclick()}
+  else if(k==='s'||k==='S')sp.onclick()});
+paint(0);
+</script>
